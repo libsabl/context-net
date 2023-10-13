@@ -35,7 +35,7 @@ public static class ValueContextExtensions
     {
         var raw = context.Value(key);
         if (raw is null) return null;
-        if (raw is T value) return value; 
+        if (raw is T value) return value;
         throw new InvalidCastException($"Invalid value associated with key {key.Label}");
     }
 
@@ -44,7 +44,7 @@ public static class ValueContextExtensions
     {
         var raw = context.Value(key);
         if (raw is null) return null;
-        if (raw is T value) return value; 
+        if (raw is T value) return value;
         throw new InvalidCastException($"Invalid value associated with key {key.Label}");
     }
 

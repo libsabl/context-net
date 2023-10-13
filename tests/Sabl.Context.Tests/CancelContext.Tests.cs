@@ -66,7 +66,7 @@ public class CancelDispose
 
         cctx.Dispose();
     }
-       
+
     [Fact]
     public void CanDisposeManyTimes()
     {

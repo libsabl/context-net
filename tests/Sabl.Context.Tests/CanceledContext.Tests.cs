@@ -16,14 +16,14 @@ public class Ctor
 
 public class CancelDispose
 {
-     
+
     [Fact]
     public void CannotCancelAfterDispose()
     {
         ICancelContext cctx = new CanceledContext(null);
         var token = cctx.CancellationToken;
-          
-        cctx.Dispose(); 
+
+        cctx.Dispose();
 
         Assert.Throws<ObjectDisposedException>(() => cctx.Cancel());
     }

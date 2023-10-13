@@ -1,4 +1,7 @@
-﻿namespace Sabl;
+﻿// Copyright 2023 Joshua Honig. All rights reserved.
+// Use of this source code is governed by a MIT license that can be found in the LICENSE file.
+
+namespace Sabl;
 
 public abstract class ContextKey
 {
@@ -13,7 +16,7 @@ public abstract class ContextKey
 
     internal abstract Type ValueType { get; }
 
-    internal abstract bool Nullable { get; } 
+    internal abstract bool Nullable { get; }
 
     /// <inheritdoc />
     public override int GetHashCode() => _hash;
@@ -47,8 +50,8 @@ public sealed class ContextKey<T> : ContextKey
     private static bool IsTypeNullable(Type t)
     {
         if (!t.IsValueType) return true;
-        if (!t.IsGenericType) return false; 
-        var tdef = t.GetGenericTypeDefinition(); 
+        if (!t.IsGenericType) return false;
+        var tdef = t.GetGenericTypeDefinition();
         return (tdef == typeof(Nullable<>));
     }
 

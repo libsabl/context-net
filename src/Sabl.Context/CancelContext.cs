@@ -2,7 +2,7 @@
 // Use of this source code is governed by a MIT license that can be found in the LICENSE file.
 
 namespace Sabl;
- 
+
 /// <summary>Internal implementation of a cancelable context</summary>
 /// <remarks>
 /// <see cref="Cancel"/> and <see cref="Dispose"/> will both dispose the underlying 

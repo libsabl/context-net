@@ -1,8 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿// Copyright 2023 Joshua Honig. All rights reserved.
+// Use of this source code is governed by a MIT license that can be found in the LICENSE file.
+
 using System.Text;
-using System.Threading.Tasks;
 
 namespace Sabl.ContextKeyClass;
 
@@ -87,7 +86,7 @@ public class EqualsOp
 #pragma warning restore CS1718 // Comparison made to same variable
     }
 }
- 
+
 public class NotEqualsOp
 {
     [Fact]
