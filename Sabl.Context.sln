@@ -1,0 +1,63 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.0.31903.59
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "build", "build", "{EC11AA2C-AC2A-4BB5-969E-D12575F1332C}"
+	ProjectSection(SolutionItems) = preProject
+		.editorconfig = .editorconfig
+		.gitignore = .gitignore
+		global.json = global.json
+		LICENSE = LICENSE
+		LICENSE_HEADER = LICENSE_HEADER
+		nuget.config = nuget.config
+		README.md = README.md
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{48B3B272-F96B-44FC-812B-43C4DC537D1C}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{A5503EF1-3224-478D-A0AB-9EF808B1730F}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "assembly", "assembly", "{37FD8BAC-575A-4912-813A-A94C6B28DFB2}"
+	ProjectSection(SolutionItems) = preProject
+		build\assembly\Common.proj = build\assembly\Common.proj
+		build\assembly\Properties.proj = build\assembly\Properties.proj
+	EndProjectSection
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Sabl.Context", "src\Sabl.Context\Sabl.Context.csproj", "{77923561-DF72-4685-9F39-443CFF4BB3D9}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Sabl.Context.Tests", "tests\Sabl.Context.Tests\Sabl.Context.Tests.csproj", "{E27B20BD-E53F-4E74-B6E0-F0795BFA77B2}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "github-workflow", "github-workflow", "{3D44B8CC-1D35-4A27-AE97-56F94C75BDE8}"
+	ProjectSection(SolutionItems) = preProject
+		.github\workflows\dotnet-test.yml = .github\workflows\dotnet-test.yml
+	EndProjectSection
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{77923561-DF72-4685-9F39-443CFF4BB3D9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{77923561-DF72-4685-9F39-443CFF4BB3D9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{77923561-DF72-4685-9F39-443CFF4BB3D9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{77923561-DF72-4685-9F39-443CFF4BB3D9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E27B20BD-E53F-4E74-B6E0-F0795BFA77B2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E27B20BD-E53F-4E74-B6E0-F0795BFA77B2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E27B20BD-E53F-4E74-B6E0-F0795BFA77B2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E27B20BD-E53F-4E74-B6E0-F0795BFA77B2}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{37FD8BAC-575A-4912-813A-A94C6B28DFB2} = {EC11AA2C-AC2A-4BB5-969E-D12575F1332C}
+		{77923561-DF72-4685-9F39-443CFF4BB3D9} = {48B3B272-F96B-44FC-812B-43C4DC537D1C}
+		{E27B20BD-E53F-4E74-B6E0-F0795BFA77B2} = {A5503EF1-3224-478D-A0AB-9EF808B1730F}
+		{3D44B8CC-1D35-4A27-AE97-56F94C75BDE8} = {EC11AA2C-AC2A-4BB5-969E-D12575F1332C}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {DB9E134B-E2BE-47C1-9B28-F3C2E2E3D66D}
+	EndGlobalSection
+EndGlobal

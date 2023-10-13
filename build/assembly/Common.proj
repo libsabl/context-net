@@ -1,0 +1,46 @@
+<Project>
+ 
+  <PropertyGroup>
+    <BaseVersion>$(MajorVersion).$(MinorVersion).$(BuildVersion)</BaseVersion>
+    
+    <Version>$(BaseVersion)</Version>
+    <AssemblyVersion>$(BaseVersion)</AssemblyVersion>
+    <FileVersion>$(BaseVersion)</FileVersion>
+
+    <Copyright>Copyright 2023 Joshua Honig. All rights reserved.</Copyright>
+
+    <!-- Leave this! It is overridden if built with a correct configuration -->
+    <PackageVersion>invalid-package-id</PackageVersion>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+
+    <!-- Include pdb files in main package -->
+    <DebugSymbols>true</DebugSymbols>
+    <AllowedOutputExtensionsInPackageBuildOutputFolder>$(AllowedOutputExtensionsInPackageBuildOutputFolder);.pdb</AllowedOutputExtensionsInPackageBuildOutputFolder>
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <PackageVersion>$(BaseVersion)</PackageVersion>
+    <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="('$(Configuration)' == 'Release') AND ('$(ReleaseMode)' == 'Release')">
+    <PackageVersion>$(FileVersion)</PackageVersion>
+    <WarningsAsErrors>CS1591</WarningsAsErrors>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="('$(Configuration)' == 'Release') AND ('$(ReleaseMode)' != 'Release')">
+    <PackageVersion>$(FileVersion)-rc$(MinorBuildVersion)</PackageVersion>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="('$(Configuration)' == 'Debug')">
+    <PackageVersion>$(FileVersion)-rc$(MinorBuildVersion)-debug</PackageVersion>
+    <DefineConstants>$(DefineConstants);INSTRUMENT</DefineConstants>
+    <NoWarn>CS1591</NoWarn>
+  </PropertyGroup>
+
+  <!-- Doc file -->
+  <PropertyGroup>
+    <DocumentationFile>bin\$(Configuration)\$(TargetFramework)\$(AssemblyName).xml</DocumentationFile>
+  </PropertyGroup>
+
+</Project>

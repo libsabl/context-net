@@ -1,0 +1,20 @@
+<Project>
+
+  <PropertyGroup>
+    <Product>Sabl</Product>
+    <Authors>Joshua Honig</Authors>
+  </PropertyGroup>
+
+  <!-- Package and file versioning -->
+  <PropertyGroup>
+    <MajorVersion>1</MajorVersion>
+    <MinorVersion>0</MinorVersion>
+    <BuildVersion>0</BuildVersion>
+
+    <!-- MinorBuildVersion should only be used in a pre-release suffix  -->
+    <MinorBuildVersion>0</MinorBuildVersion>
+  </PropertyGroup>
+
+  <Import Project=".\Common.proj"/>
+
+</Project>
