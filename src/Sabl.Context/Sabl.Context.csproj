@@ -1,0 +1,29 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net7.0</TargetFramework>
+    <RootNamespace>Sabl</RootNamespace>
+    <Nullable>enable</Nullable>
+    <LangVersion>latest</LangVersion>
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <PackageId>Sabl.Context</PackageId>
+    <Title>Sabl Context pattern</Title>
+    <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
+    <Description>Basic mechanics for the immutable context tree pattern</Description>
+    <PackageProjectUrl>https://github.com/libsabl/context-net</PackageProjectUrl>
+
+    <RepositoryUrl>https://github.com/libsabl/context-net.git</RepositoryUrl>
+    <RepositoryType>git</RepositoryType>
+
+    <!--<GeneratePackageOnBuild>true</GeneratePackageOnBuild>-->
+  </PropertyGroup>
+ 
+  <Import Project="..\..\build\assembly\Properties.proj" />
+ 
+  <ItemGroup>
+    <PackageReference Include="System.Collections.Immutable" Version="7.0.0" />
+  </ItemGroup>
+
+</Project>
