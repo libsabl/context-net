@@ -13,10 +13,6 @@ public abstract class ContextKey
 
     internal abstract Type ValueType { get; }
 
-    internal abstract Type ResolverType { get; }
-
-    internal abstract Type AsyncResolverType { get; }
-
     internal abstract bool Nullable { get; } 
 
     /// <inheritdoc />
@@ -38,8 +34,6 @@ public abstract class ContextKey
 public sealed class ContextKey<T> : ContextKey
 {
     private readonly Type _type;
-    private readonly Type _resolverType;
-    private readonly Type _asyncResolverType;
     private readonly bool _nullable;
 
     public ContextKey() : this(typeof(T).Name) { }
@@ -48,27 +42,17 @@ public sealed class ContextKey<T> : ContextKey
     {
         _type = typeof(T);
         _nullable = IsTypeNullable(_type);
-        _resolverType = typeof(IResolver<T>);
-        _asyncResolverType = typeof(IAsyncResolver<T>);
     }
 
     private static bool IsTypeNullable(Type t)
     {
         if (!t.IsValueType) return true;
-        if (!t.IsGenericType) return false;
-        if (t.IsGenericTypeDefinition) throw new InvalidOperationException("Cannot use open generic type for ContextKey value type");
-
-        while (t.BaseType != null) {
-            t = t.BaseType;
-        }
-        return (t == typeof(Nullable<>));
+        if (!t.IsGenericType) return false; 
+        var tdef = t.GetGenericTypeDefinition(); 
+        return (tdef == typeof(Nullable<>));
     }
 
     internal override Type ValueType => _type;
 
     internal override bool Nullable => _nullable;
-
-    internal override Type ResolverType => _resolverType;
-
-    internal override Type AsyncResolverType => _asyncResolverType;
 }

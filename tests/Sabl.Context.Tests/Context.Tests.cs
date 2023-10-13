@@ -143,3 +143,14 @@ public class Empty
         Assert.Equal(1, ectx.Value("a"));
     }
 }
+
+public class Value
+{
+    [Fact]
+    public void CreatesValueContext()
+    {
+        var ctx = Context.Value("number", 33);
+        Assert.IsType<ValueContext>(ctx);
+        Assert.Equal(33, ctx.Value("number"));
+    }
+}

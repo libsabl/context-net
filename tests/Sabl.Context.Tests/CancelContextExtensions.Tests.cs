@@ -1,26 +1,6 @@
-﻿// Copyright 2023 Joshua Honig. All rights reserved.
-// Use of this source code is governed by a MIT license that can be found in the LICENSE file.
+﻿using System.Threading.Tasks;
 
-using System.Collections.Generic;
-using System.Threading.Tasks;
-
-namespace Sabl.ContextExtensionsClass;
-
-public class WithValue
-{
-    [Fact]
-    public void ReturnsAValueContext()
-    {
-        var key = new Symbol("key");
-        var ctx = Context.Background;
-
-        var vctx = ctx.WithValue(key, 42);
-        Assert.IsType<ValueContext>(vctx);
-
-        var v = vctx.Value(key);
-        Assert.Equal(42, v);
-    }
-}
+namespace Sabl.CancelContextExtensionsClass;
 
 public class WithCancel
 {
@@ -47,76 +27,6 @@ public class WithCancel
 
         // Already canceled
         Assert.True(cctx.CancellationToken.IsCancellationRequested);
-    }
-}
-
-public class ValueOfT
-{
-    [Fact]
-    public void ReturnsWrappedItem()
-    {
-        var key = new Symbol("my-string");
-        var ctx = Context.Value(key, "hello");
-
-        var val = ctx.Value<string>(key);
-        Assert.False(val.IsNull);
-        Assert.Equal("hello", val.Value);
-    }
-
-    [Fact]
-    public void ImplicitToTargetType()
-    {
-        var key = new Symbol("my-string");
-        var ctx = Context.Value(key, "hello");
-
-        string val = ctx.Value<string>(key);
-        Assert.Equal("hello", val);
-    }
-
-    [Fact]
-    public void ImplicitThrowsIfNotDefined()
-    {
-        var key = new Symbol("my-string");
-        var ctx = Context.Background;
-
-        Assert.Throws<KeyNotFoundException>(() => {
-            string _ = ctx.Value<string>(key);
-        });
-    }
-}
-
-public class StructValueOfT
-{
-    [Fact]
-    public void ReturnsWrappedItem()
-    {
-        var key = new Symbol("my-number");
-        var ctx = Context.Value(key, 22);
-
-        var val = ctx.StructValue<int>(key);
-        Assert.False(val.IsNull);
-        Assert.Equal(22, val.Value);
-    }
-
-    [Fact]
-    public void ImplicitToTargetType()
-    {
-        var key = new Symbol("my-number");
-        var ctx = Context.Value(key, 22);
-
-        int val = ctx.StructValue<int>(key);
-        Assert.Equal(22, val);
-    }
-
-    [Fact]
-    public void ImplicitThrowsIfNotDefined()
-    {
-        var key = new Symbol("my-number");
-        var ctx = Context.Background;
-
-        Assert.Throws<KeyNotFoundException>(() => {
-            int _ = ctx.StructValue<int>(key);
-        });
     }
 }
 
