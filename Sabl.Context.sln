@@ -28,6 +28,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Sabl.Context", "src\Sabl.Co
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Sabl.Context.Tests", "tests\Sabl.Context.Tests\Sabl.Context.Tests.csproj", "{E27B20BD-E53F-4E74-B6E0-F0795BFA77B2}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "github-workflow", "github-workflow", "{3D44B8CC-1D35-4A27-AE97-56F94C75BDE8}"
+	ProjectSection(SolutionItems) = preProject
+		.github\workflows\dotnet-test.yml = .github\workflows\dotnet-test.yml
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -50,6 +55,7 @@ Global
 		{37FD8BAC-575A-4912-813A-A94C6B28DFB2} = {EC11AA2C-AC2A-4BB5-969E-D12575F1332C}
 		{77923561-DF72-4685-9F39-443CFF4BB3D9} = {48B3B272-F96B-44FC-812B-43C4DC537D1C}
 		{E27B20BD-E53F-4E74-B6E0-F0795BFA77B2} = {A5503EF1-3224-478D-A0AB-9EF808B1730F}
+		{3D44B8CC-1D35-4A27-AE97-56F94C75BDE8} = {EC11AA2C-AC2A-4BB5-969E-D12575F1332C}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {DB9E134B-E2BE-47C1-9B28-F3C2E2E3D66D}
