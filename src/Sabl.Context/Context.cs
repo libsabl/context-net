@@ -5,10 +5,10 @@ namespace Sabl;
 
 /// <summary>
 /// A base implementation of <see cref="IContext"/> that 
-/// provides a name and an inner context. The inner context is neither
+/// provides a name and an parent context. The parent context is neither
 /// required nor guaranteed to be non-null
 /// </summary>
-public abstract class Context : IContext
+public abstract class Context : IContext, IChildContext
 {
     private readonly CancellationToken _parentToken;
 
