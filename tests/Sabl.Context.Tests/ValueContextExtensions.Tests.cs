@@ -89,7 +89,7 @@ public class WithValue
     }
 }
 
-public class ValueOfT
+public class GetOfT
 {
     [Fact]
     public void ReturnsValue()
@@ -97,7 +97,7 @@ public class ValueOfT
         ContextKey<Encoding> key = new();
         var ctx = Context.Background;
         var vctx = ctx.WithValue(key, Encoding.UTF8);
-        var v = ValueContextExtensions.Value(vctx, key);
+        Encoding? v = vctx.Get(key);
         Assert.Same(Encoding.UTF8, v);
     }
 
@@ -106,7 +106,7 @@ public class ValueOfT
     {
         ContextKey<Encoding> key = new();
         var ctx = Context.Background;
-        var v = ValueContextExtensions.Value(ctx, key);
+        Encoding? v = ctx.Get(key);
         Assert.Null(v);
     }
 
@@ -115,12 +115,12 @@ public class ValueOfT
     {
         ContextKey<Encoding> key = new();
         var ctx = new ValueContext(Context.Background, key, "boom");
-        var ex = Assert.Throws<InvalidCastException>(() => ValueContextExtensions.Value(ctx, key));
+        var ex = Assert.Throws<InvalidCastException>(() => ctx.Get(key));
         Assert.Equal("Invalid value associated with key Encoding", ex.Message);
     }
 }
 
-public class TryOfNullableT
+public class ValueOfNullableT
 {
     [Fact]
     public void ReturnsValue()
@@ -128,7 +128,7 @@ public class TryOfNullableT
         ContextKey<int?> key = new();
         var ctx = Context.Background;
         var vctx = ctx.WithValue(key, 22);
-        var v = vctx.Try(key);
+        int? v = vctx.Get(key);
         Assert.Equal(22, v);
     }
 
@@ -137,7 +137,7 @@ public class TryOfNullableT
     {
         ContextKey<int?> key = new();
         var ctx = Context.Background;
-        var v = ctx.Try(key);
+        int? v = ctx.Get(key);
         Assert.Null(v);
     }
 
@@ -146,7 +146,7 @@ public class TryOfNullableT
     {
         ContextKey<int?> key = new();
         var ctx = (IContext)new ValueContext(Context.Background, key, "boom");
-        var ex = Assert.Throws<InvalidCastException>(() => ctx.Try(key));
+        var ex = Assert.Throws<InvalidCastException>(() => ctx.Get(key));
         Assert.Equal("Invalid value associated with key Nullable<Int32>", ex.Message);
     }
 }
@@ -159,7 +159,7 @@ public class TryOfT
         ContextKey<int> key = new();
         var ctx = Context.Background;
         var vctx = ctx.WithValue(key, 22);
-        var v = vctx.Try(key);
+        int v = vctx.Get(key);
         Assert.Equal(22, v);
     }
 
@@ -168,8 +168,8 @@ public class TryOfT
     {
         ContextKey<int> key = new();
         var ctx = Context.Background;
-        var v = ctx.Try(key);
-        Assert.Null(v);
+        int v = ctx.Get(key);
+        Assert.Equal(0, v);
     }
 
     [Fact]
@@ -177,7 +177,7 @@ public class TryOfT
     {
         ContextKey<int> key = new();
         var ctx = (IContext)new ValueContext(Context.Background, key, "boom");
-        var ex = Assert.Throws<InvalidCastException>(() => ctx.Try(key));
+        var ex = Assert.Throws<InvalidCastException>(() => ctx.Get(key));
         Assert.Equal("Invalid value associated with key Int32", ex.Message);
     }
 }

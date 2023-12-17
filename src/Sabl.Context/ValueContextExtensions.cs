@@ -21,31 +21,11 @@ public static class ValueContextExtensions
         return new ValueContext(context, key, value);
     }
 
-    /// <summary>Get a definitely typed class instance from the context, returning null if the item is not defined</summary> 
-    public static T? Value<T>(this IContext context, ContextKey<T> key) where T : class
+    /// <summary>Get a definitely typed value from the context, returning default(T) if the item is not defined</summary> 
+    public static T? Get<T>(this IContext context, ContextKey<T> key)  
     {
         var raw = context.Value(key);
-        if (raw is null) return null;
-        if (raw is T value) return value;
-        throw new InvalidCastException($"Invalid value associated with key {key.Label}");
-    }
-
-    /// <summary>Get a definitely typed struct value from the context, returning null if the item is not defined</summary> 
-    /// <remarks>This overload supports keys where the the key type is a <see cref="Nullable{T}"/></remarks>
-    public static T? Try<T>(this IContext context, ContextKey<T?> key) where T : struct
-    {
-        var raw = context.Value((object)key);
-        if (raw is null) return null;
-        if (raw is T value) return value;
-        throw new InvalidCastException($"Invalid value associated with key {key.Label}");
-    }
-
-    /// <summary>Get a definitely typed struct value from the context, returning null if the item is not defined</summary> 
-    /// <remarks>This overload supports keys where the the key type is a non-nullable value type</remarks>
-    public static T? Try<T>(this IContext context, ContextKey<T> key) where T : struct
-    {
-        var raw = context.Value((object)key);
-        if (raw is null) return null;
+        if (raw is null) return default;
         if (raw is T value) return value;
         throw new InvalidCastException($"Invalid value associated with key {key.Label}");
     }
@@ -68,7 +48,7 @@ public static class ValueContextExtensions
     /// the iteration.
     /// </remarks>
     public static IEnumerable<KeyValuePair<object, object?>> AllValues(this IContext context, bool distinct = false)
-        => distinct ? AllDistinctValues(context) : AllValuesNonDistinct(context);
+        => distinct ? AllValuesDistinct(context) : AllValuesNonDistinct(context);
 
     private static IEnumerable<KeyValuePair<object, object?>> AllValuesNonDistinct(IContext context)
     {
@@ -81,7 +61,7 @@ public static class ValueContextExtensions
         }
     }
 
-    private static IEnumerable<KeyValuePair<object, object?>> AllDistinctValues(IContext context)
+    private static IEnumerable<KeyValuePair<object, object?>> AllValuesDistinct(IContext context)
     {
         var cctx = context as IChildContext;
         if (cctx == null)
