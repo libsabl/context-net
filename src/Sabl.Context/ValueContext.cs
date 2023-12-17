@@ -12,6 +12,10 @@ internal class ValueContext : Context
         this.value = value;
     }
 
+    internal object Key => key;
+
+    internal object? OwnValue => value;
+
     private readonly object key;
     private readonly object? value;
 

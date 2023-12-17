@@ -7,7 +7,7 @@ namespace Sabl;
 public interface IContext
 {
     /// <summary>Retrieve a named value by its key</summary>
-    /// <remarks>Value should simply return null if the key is not defined</remarks>
+    /// <remarks><see cref="Value" /> should simply return null if the key is not defined</remarks>
     object? Value(object key);
 
     /// <summary>The cancellation token for the context</summary>
@@ -26,4 +26,15 @@ public interface ICancelContext : IContext, IDisposable
     /// Cancel the context and all descendant contexts
     /// </summary>
     void Cancel();
+}
+
+/// <summary>
+/// A <see cref="IContext"/> which has a parent context
+/// </summary>
+public interface IChildContext : IContext
+{
+    /// <summary>
+    /// The parent context of the current context
+    /// </summary>
+    IContext? Parent { get; }
 }

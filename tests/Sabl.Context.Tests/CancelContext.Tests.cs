@@ -8,7 +8,7 @@ public class Ctor
     [Fact]
     public void CalledCancel()
     {
-        var cctx = new CancelContext(null);
+        using var cctx = new CancelContext(null);
         Assert.Equal("Cancel", cctx.Name);
         cctx.TokenSource.Dispose();
     }
@@ -16,11 +16,10 @@ public class Ctor
 
 public class CancelDispose
 {
-
     [Fact]
     public void DisposeDoesNotCancel()
     {
-        var cctx = new CancelContext(null);
+        using var cctx = new CancelContext(null);
         var token = cctx.CancellationToken;
 
         Assert.False(token.IsCancellationRequested);
@@ -33,7 +32,7 @@ public class CancelDispose
     [Fact]
     public void CannotCancelAfterDispose()
     {
-        var cctx = new CancelContext(null);
+        using var cctx = new CancelContext(null);
         var token = cctx.CancellationToken;
 
         Assert.False(token.IsCancellationRequested);
@@ -48,7 +47,7 @@ public class CancelDispose
     [Fact]
     public void CanCancelManyTimes()
     {
-        var cctx = new CancelContext(null);
+        using var cctx = new CancelContext(null);
         var token = cctx.CancellationToken;
 
         Assert.False(token.IsCancellationRequested);
@@ -70,7 +69,7 @@ public class CancelDispose
     [Fact]
     public void CanDisposeManyTimes()
     {
-        var cctx = new CancelContext(null);
+        using var cctx = new CancelContext(null);
 
         cctx.Dispose();
 
@@ -80,7 +79,6 @@ public class CancelDispose
         cctx.Dispose();
     }
 }
-
 
 public class Tree
 {
@@ -102,8 +100,8 @@ public class Tree
     [Fact]
     public void DisposeAutomaticallyUnregisters()
     {
-        var ctxParent = new CancelContext(null);
-        var ctxChild = ctxParent.WithValue("One", 1).WithValue("Two", 2).WithCancel();
+        using var ctxParent = new CancelContext(null);
+        using var ctxChild = ctxParent.WithValue("One", 1).WithValue("Two", 2).WithCancel();
 
         var regCnt = ctxParent.TokenSource.GetRegistrationCount();
         Assert.Equal(1, regCnt);
@@ -117,8 +115,8 @@ public class Tree
     [Fact]
     public void CancelAutomaticallyUnregisters()
     {
-        var ctxParent = new CancelContext(null);
-        var ctxChild = ctxParent.WithValue("One", 1).WithValue("Two", 2).WithCancel();
+        using var ctxParent = new CancelContext(null);
+        using var ctxChild = ctxParent.WithValue("One", 1).WithValue("Two", 2).WithCancel();
 
         var regCnt = ctxParent.TokenSource.GetRegistrationCount();
         Assert.Equal(1, regCnt);
@@ -143,5 +141,4 @@ public class Tree
         Assert.True(ctxChild.CancellationToken.IsCancellationRequested);
         Assert.False(ctxParent.CancellationToken.IsCancellationRequested);
     }
-
 }

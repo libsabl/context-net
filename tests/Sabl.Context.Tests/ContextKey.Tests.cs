@@ -1,6 +1,7 @@
 ﻿// Copyright 2023 Joshua Honig. All rights reserved.
 // Use of this source code is governed by a MIT license that can be found in the LICENSE file.
 
+using System.Collections.Generic;
 using System.Text;
 
 namespace Sabl.ContextKeyClass;
@@ -21,6 +22,20 @@ public class Ctor
     {
         var key = new ContextKey<string>();
         Assert.Equal("String", key.Label);
+    }
+
+    [Fact]
+    public void DefaultsLabelToTypeName_Nullable()
+    {
+        var key = new ContextKey<int?>();
+        Assert.Equal("Nullable<Int32>", key.Label);
+    }
+
+    [Fact]
+    public void DefaultsLabelToTypeName_Generic()
+    {
+        var key = new ContextKey<Dictionary<string, int>>();
+        Assert.Equal("Dictionary`2", key.Label);
     }
 
     [Fact]

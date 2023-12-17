@@ -2,6 +2,7 @@
 // Use of this source code is governed by a MIT license that can be found in the LICENSE file.
 
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 
 namespace Sabl.ValueContextExtensionsClass;
@@ -83,21 +84,8 @@ public class WithValue
         var ctx = Context.Background;
 
         var ex = Assert.Throws<InvalidCastException>(() => ctx.WithValue((object)key, DateTime.Now));
-        var expectedMessage = "Provided value cannot be assigned to type System.Int32 associated with key Int32";
+        var expectedMessage = "Provided value of type System.DateTime cannot be assigned to type System.Int32 associated with key Int32";
         Assert.Equal(expectedMessage, ex.Message);
-    }
-}
-
-public class WithValueOfT
-{
-    [Fact]
-    public void AssignsValue()
-    {
-        ContextKey<int> key = new();
-        var ctx = Context.Background;
-        var vctx = ctx.WithValue(key, 42);
-        var v = vctx.Value(key);
-        Assert.Equal(42, v);
     }
 }
 
@@ -109,7 +97,7 @@ public class GetOfT
         ContextKey<Encoding> key = new();
         var ctx = Context.Background;
         var vctx = ctx.WithValue(key, Encoding.UTF8);
-        var v = vctx.Get(key);
+        Encoding? v = vctx.Get(key);
         Assert.Same(Encoding.UTF8, v);
     }
 
@@ -118,7 +106,7 @@ public class GetOfT
     {
         ContextKey<Encoding> key = new();
         var ctx = Context.Background;
-        var v = ctx.Get(key);
+        Encoding? v = ctx.Get(key);
         Assert.Null(v);
     }
 
@@ -132,8 +120,38 @@ public class GetOfT
     }
 }
 
+public class ValueOfNullableT
+{
+    [Fact]
+    public void ReturnsValue()
+    {
+        ContextKey<int?> key = new();
+        var ctx = Context.Background;
+        var vctx = ctx.WithValue(key, 22);
+        int? v = vctx.Get(key);
+        Assert.Equal(22, v);
+    }
 
-public class GetValueOfT
+    [Fact]
+    public void ReturnsNull()
+    {
+        ContextKey<int?> key = new();
+        var ctx = Context.Background;
+        int? v = ctx.Get(key);
+        Assert.Null(v);
+    }
+
+    [Fact]
+    public void ThrowsInvalidCast()
+    {
+        ContextKey<int?> key = new();
+        var ctx = (IContext)new ValueContext(Context.Background, key, "boom");
+        var ex = Assert.Throws<InvalidCastException>(() => ctx.Get(key));
+        Assert.Equal("Invalid value associated with key Nullable<Int32>", ex.Message);
+    }
+}
+
+public class TryOfT
 {
     [Fact]
     public void ReturnsValue()
@@ -141,7 +159,7 @@ public class GetValueOfT
         ContextKey<int> key = new();
         var ctx = Context.Background;
         var vctx = ctx.WithValue(key, 22);
-        var v = vctx.GetValue(key);
+        int v = vctx.Get(key);
         Assert.Equal(22, v);
     }
 
@@ -150,16 +168,16 @@ public class GetValueOfT
     {
         ContextKey<int> key = new();
         var ctx = Context.Background;
-        var v = ctx.GetValue(key);
-        Assert.Null(v);
+        int v = ctx.Get(key);
+        Assert.Equal(0, v);
     }
 
     [Fact]
     public void ThrowsInvalidCast()
     {
         ContextKey<int> key = new();
-        var ctx = new ValueContext(Context.Background, key, "boom");
-        var ex = Assert.Throws<InvalidCastException>(() => ctx.GetValue(key));
+        var ctx = (IContext)new ValueContext(Context.Background, key, "boom");
+        var ex = Assert.Throws<InvalidCastException>(() => ctx.Get(key));
         Assert.Equal("Invalid value associated with key Int32", ex.Message);
     }
 }
@@ -211,6 +229,79 @@ public class RequireOfT
         ContextKey<Encoding> key = new();
         var ctx = new ValueContext(Context.Background, key, "boom");
         var ex = Assert.Throws<InvalidCastException>(() => ctx.Require(key));
-        Assert.Equal("Invalid value associated with key Encoding", ex.Message);
+        Assert.Equal("Invalid value of type System.String associated with key Encoding for type System.Text.Encoding", ex.Message);
+    }
+}
+
+public class AllValues
+{
+    private static readonly ContextKey<string> strKey1 = new("item 1");
+    private static readonly ContextKey<string> strKey2 = new("item 2");
+    private static readonly ContextKey<int> numKey = new("number");
+
+    private static readonly IContext ctx = Context.Background
+        .WithValue(strKey1, "Hello")
+        .WithValue(strKey2, "Hi")
+        .WithCancel()
+        .WithValue(numKey, 22)
+        .WithValue(strKey2, "Another value");
+
+    [Fact]
+    public void ReturnsAllKeyValuePairs()
+    {
+
+        var pairs = ctx.AllValues().ToList();
+        var expected = new List<KeyValuePair<object, object?>> {
+            new(strKey2, "Another value"),
+            new(numKey, 22),
+            new(strKey2, "Hi"),
+            new(strKey1, "Hello"),
+        };
+
+        Assert.Equal(expected, pairs);
+    }
+
+    [Fact]
+    public void ReturnsDistinctKeyValuePairs()
+    {
+        var pairs = ctx.AllValues(true).ToList();
+        var expected = new List<KeyValuePair<object, object?>> {
+            new(strKey2, "Another value"),
+            new(numKey, 22),
+            new(strKey1, "Hello"),
+        };
+
+        Assert.Equal(expected, pairs);
+    }
+
+    private class SillyContext : IContext
+    {
+        public IContext? MyParent { get; }
+
+        public SillyContext(IContext? myParent)
+        {
+            this.MyParent = myParent;
+        }
+
+        public CancellationToken CancellationToken
+            => this.MyParent?.CancellationToken ?? CancellationToken.None;
+
+        public object? Value(object key)
+            => this.MyParent?.Value(key);
+    }
+
+    [Fact]
+    public void ReturnsEmptyForNonChildContext()
+    {
+        var sillyCtx = new SillyContext(ctx);
+
+        // Yes, it implements .Value and will return items by key
+        Assert.Equal("Hello", sillyCtx.Value(strKey1));
+        Assert.Equal("Another value", sillyCtx.Value(strKey2));
+        Assert.Equal(22, sillyCtx.Value(numKey));
+
+        // But because it does not implement IChildContext, AllValues returns empty
+        var pairs = sillyCtx.AllValues(true);
+        Assert.Empty(pairs);
     }
 }
